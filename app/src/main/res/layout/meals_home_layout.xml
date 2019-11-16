@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+    <variable
+        name="homeVm"
+        type="com.example.foodmeals.viewModels.MealsHomeViewModel" />
+    </data>
+    <ScrollView
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <com.mabrouk.slideroval.SliderLayout
+        android:id="@+id/sliderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.cardview.widget.CardView
+        android:elevation="13dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        app:layout_constraintBottom_toTopOf="@+id/non_alcoholic_rcv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sliderLayout"
+        app:layout_constraintVertical_bias="0.93"
+        app:cardCornerRadius="20dp"
+        android:onClick="@{() ->homeVm.search()}"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            >
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.312" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Find Recipes .... "
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:onClick="@{() -> homeVm.countryClick()}"
+                android:id="@+id/country_img"
+                android:padding="7dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView"
+                app:layout_constraintHorizontal_bias="0.89"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/earth" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/non_alcoholic_rcv"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sliderLayout" />
+
+    <com.mabrouk.loaderlib.LoaderView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:callBack="@{homeVm.catergoryCallBack}"
+        app:errorMsg="@{homeVm.categoryError}"
+        app:layout_constraintBottom_toBottomOf="@id/non_alcoholic_rcv"
+        app:layout_constraintEnd_toEndOf="@id/non_alcoholic_rcv"
+        app:layout_constraintStart_toStartOf="@+id/non_alcoholic_rcv"
+        app:layout_constraintTop_toTopOf="@+id/non_alcoholic_rcv"
+        app:loaderColor="@color/colorPrimary"
+        app:loaderType="Circle"
+        app:showError="@{homeVm.categoryError!=null}"
+        app:showLoader="@{homeVm.categoryLoader}" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="13dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Ingredients "
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/non_alcoholic_rcv" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:background="@android:color/transparent"
+        android:id="@+id/alcoholic_rcv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <com.mabrouk.loaderlib.LoaderView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:callBack="@{homeVm.mealsCallBack}"
+        app:errorMsg="@{homeVm.mealsError}"
+        app:layout_constraintBottom_toBottomOf="@id/alcoholic_rcv"
+        app:layout_constraintEnd_toEndOf="@id/alcoholic_rcv"
+        app:layout_constraintStart_toStartOf="@+id/alcoholic_rcv"
+        app:layout_constraintTop_toTopOf="@+id/alcoholic_rcv"
+        app:loaderColor="@color/colorPrimary"
+        app:loaderType="Circle"
+        app:showError="@{homeVm.mealsError!=null}"
+        app:showLoader="@{homeVm.mealsLoader}" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
