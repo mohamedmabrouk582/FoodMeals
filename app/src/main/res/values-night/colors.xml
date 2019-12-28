@@ -6,5 +6,6 @@
     <color name="white">#000</color>
     <color name="black">#fff</color>
     <color name="gray">#cccccc</color>
+    <color name="loader">#fff</color>
 
 </resources>

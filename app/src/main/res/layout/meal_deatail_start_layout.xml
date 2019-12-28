@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:loaderColor="@color/colorPrimary"
+        app:loaderColor="@color/loader"
         app:loaderType="Circle"
         app:showLoader="@{mealsVm.loader}"
         app:showError="@{mealsVm.error!=null}"

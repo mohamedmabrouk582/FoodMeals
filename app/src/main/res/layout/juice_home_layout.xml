@@ -110,7 +110,7 @@
                 app:layout_constraintEnd_toEndOf="@id/non_alcoholic_rcv"
                 app:layout_constraintStart_toStartOf="@+id/non_alcoholic_rcv"
                 app:layout_constraintTop_toTopOf="@+id/non_alcoholic_rcv"
-                app:loaderColor="@color/colorPrimary"
+                app:loaderColor="@color/loader"
                 app:loaderType="Circle"
                 app:showError="@{homeVm.nonAlcoholicError!=null}"
                 app:showLoader="@{homeVm.nonAlcoholicLoader}" />
@@ -150,7 +150,7 @@
                 app:layout_constraintEnd_toEndOf="@id/alcoholic_rcv"
                 app:layout_constraintStart_toStartOf="@+id/alcoholic_rcv"
                 app:layout_constraintTop_toTopOf="@+id/alcoholic_rcv"
-                app:loaderColor="@color/colorPrimary"
+                app:loaderColor="@color/loader"
                 app:loaderType="Circle"
                 app:showError="@{homeVm.alcoholicError!=null}"
                 app:showLoader="@{homeVm.alcoholicLoader}" />

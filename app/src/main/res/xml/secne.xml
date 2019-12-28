@@ -24,7 +24,7 @@
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
-            motion:loaderColor="@color/colorPrimary"
+            motion:loaderColor="@color/loader"
             motion:loaderType="Circle" />
 
 
@@ -170,7 +170,7 @@
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
-            motion:loaderColor="@color/colorPrimary"
+            motion:loaderColor="@color/loader"
             motion:loaderType="Circle" />
 
         <Constraint
