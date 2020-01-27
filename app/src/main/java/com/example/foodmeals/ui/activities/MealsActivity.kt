@@ -16,10 +16,7 @@ import com.example.foodmeals.data.models.Meal
 import com.example.foodmeals.databinding.MealsLayoutBinding
 import com.example.foodmeals.ui.adapters.FilterMealsAdapter
 import com.example.foodmeals.ui.base.BaseActivity
-import com.example.foodmeals.utils.FILTER_TYPE_KEY
-import com.example.foodmeals.utils.FOOD_TYPE
-import com.example.foodmeals.utils.GridAutoFitLayoutManager
-import com.example.foodmeals.utils.QUERY_KEY
+import com.example.foodmeals.utils.*
 import com.example.foodmeals.viewModels.MealsViewModel
 import com.example.foodmeals.viewModels.base.BaseViewModel
 import com.example.foodmeals.viewModels.base.BaseViewModelFactory
@@ -49,10 +46,11 @@ class MealsActivity : BaseActivity() , MealsCallBack{
     }
 
     companion object{
-        fun start(context: Context,query:String, type:FiltersType,foodType: FoodType){
+        fun start(context: Context,id:Long,query:String, type:FiltersType,foodType: FoodType){
             val intent = Intent(context,MealsActivity::class.java)
             intent.flags=Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(QUERY_KEY,query)
+            intent.putExtra(ID_KEY,id)
             intent.putExtra(FILTER_TYPE_KEY,type)
             intent.putExtra(FOOD_TYPE,foodType)
             context.startActivity(intent)
@@ -75,6 +73,7 @@ class MealsActivity : BaseActivity() , MealsCallBack{
         meals_rcv.adapter=adapter
         viewModel=getViewModel(this,factory)
         viewModel.attachView(this)
+        viewModel.id=intent.getLongExtra(ID_KEY,0)
         layoutBinding.mealsVm=viewModel
         if (foodType==FoodType.Drinks)
             viewModel.reqDrink(query,type)
@@ -110,6 +109,8 @@ class MealsActivity : BaseActivity() , MealsCallBack{
 //        }
 //        return super.onOptionsItemSelected(item)
 //    }
+
+    override fun getMealsActivity(): MealsActivity = this
 
     inline fun <reified T : BaseViewModel<MealsCallBack>> getViewModel(activity: FragmentActivity, factory: BaseViewModelFactory) : T{
         return ViewModelProviders.of(activity,factory)[T::class.java]

@@ -28,13 +28,13 @@ class BaseViewModelFactory(
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MealsHomeViewModel::class.java))
-            return MealsHomeViewModel<MealsHomeCallBack>(application,api) as T
+            return MealsHomeViewModel<MealsHomeCallBack>(application,api,mealsDao) as T
         else if (modelClass.isAssignableFrom(MealsViewModel::class.java))
-            return MealsViewModel<MealsCallBack>(application,api,juiceApi) as T
+            return MealsViewModel<MealsCallBack>(application,api,juiceApi,mealsDao) as T
         else if (modelClass.isAssignableFrom(MealDetailsViewModel::class.java))
-            return MealDetailsViewModel<MealDetailsCallBack>(application,api,juiceApi) as T
+            return MealDetailsViewModel<MealDetailsCallBack>(application,api,juiceApi,mealsDao) as T
         else if (modelClass.isAssignableFrom(DrinkHomeViewModel::class.java))
-            return DrinkHomeViewModel<JuiceHomeCallBack>(application,juiceApi) as T
+            return DrinkHomeViewModel<JuiceHomeCallBack>(application,juiceApi,mealsDao) as T
         throw IllegalArgumentException("Your View Model Not Found")
     }
 }

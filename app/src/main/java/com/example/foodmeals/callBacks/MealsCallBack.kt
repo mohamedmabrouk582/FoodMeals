@@ -1,6 +1,7 @@
 package com.example.foodmeals.callBacks
 
 import com.example.foodmeals.data.models.Meal
+import com.example.foodmeals.ui.activities.MealsActivity
 
 
 /*
@@ -9,5 +10,6 @@ import com.example.foodmeals.data.models.Meal
 */
 
 interface MealsCallBack : BaseCallBack {
+    fun getMealsActivity():MealsActivity
     fun loadMeals(data:ArrayList<Meal>)
 }

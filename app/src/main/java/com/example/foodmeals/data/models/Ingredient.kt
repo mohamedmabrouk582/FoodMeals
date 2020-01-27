@@ -1,5 +1,8 @@
 package com.example.foodmeals.data.models
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 
@@ -8,7 +11,8 @@ import com.google.gson.annotations.SerializedName
 * Cook Meals
 */
 
-data class Ingredient(val idIngredient:Long=0, @SerializedName("strIngredient")val content:String, val desc:String){
+@Entity
+data class Ingredient(val idIngredient:Long=0, @PrimaryKey @ColumnInfo(name = "strIngredient") @SerializedName("strIngredient")val content:String, val desc:String?){
     var url:String=""
     get() { return "https://www.themealdb.com/images/ingredients/$content.png" }
 }

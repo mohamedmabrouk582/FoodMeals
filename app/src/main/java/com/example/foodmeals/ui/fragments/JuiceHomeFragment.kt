@@ -25,8 +25,6 @@ import com.mabrouk.slideroval.DefaultSliderView
 import com.mabrouk.slideroval.ScrollTimeType
 import com.mabrouk.slideroval.SliderAnimations
 import kotlinx.android.synthetic.main.juice_home_layout.*
-import kotlinx.android.synthetic.main.juice_home_layout.alcoholic_rcv
-import kotlinx.android.synthetic.main.juice_home_layout.sliderLayout
 import org.koin.android.ext.android.inject
 
 class JuiceHomeFragment : BaseFragment() , JuiceHomeCallBack ,RequestCoroutines, DrinkAdapter.DrinkListener {
@@ -85,6 +83,8 @@ class JuiceHomeFragment : BaseFragment() , JuiceHomeCallBack ,RequestCoroutines,
             meal.idMeal,FoodType.Drinks
         )
     }
+
+    override fun getJuiceFragment(): JuiceHomeFragment = this
 
     inline fun<reified T:BaseViewModel<JuiceHomeCallBack>> getViewModel(activity:FragmentActivity):T{
         return ViewModelProviders.of(activity,factory)[T::class.java]

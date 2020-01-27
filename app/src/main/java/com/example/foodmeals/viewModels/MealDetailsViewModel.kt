@@ -3,18 +3,24 @@ package com.example.foodmeals.viewModels
 import android.app.Application
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.example.foodmeals.R
 import com.example.foodmeals.callBacks.MealDetailsCallBack
 import com.example.foodmeals.data.api.BaseApi
 import com.example.foodmeals.data.api.JuiceApi
+import com.example.foodmeals.data.db.MealDao
 import com.example.foodmeals.data.models.MealsResponse
 import com.example.foodmeals.utils.network.RequestCoroutines
 import com.example.foodmeals.utils.network.RequestListener
 import com.example.foodmeals.viewModels.base.BaseViewModel
 import com.mabrouk.loaderlib.RetryCallBack
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 /*
@@ -22,7 +28,7 @@ import com.mabrouk.loaderlib.RetryCallBack
 * Cook Meals
 */
 
-class MealDetailsViewModel<v : MealDetailsCallBack>(application: Application, val api: BaseApi, val juiceApi:JuiceApi) : BaseViewModel<v>(application), RequestCoroutines {
+class MealDetailsViewModel<v : MealDetailsCallBack>(application: Application, val api: BaseApi, val juiceApi:JuiceApi,val dao:MealDao) : BaseViewModel<v>(application), RequestCoroutines {
     val loader:ObservableBoolean      = ObservableBoolean()
     val error:ObservableField<String> = ObservableField()
     var id:Long=0
@@ -50,7 +56,13 @@ class MealDetailsViewModel<v : MealDetailsCallBack>(application: Application, va
         override fun onResponse(data: MutableLiveData<MealsResponse>) {
             if (data.value?.meals!=null){
                 loader.set(false)
-                view.loadMeal(data.value?.meals?.get(0)!!)
+                data.value?.meals?.get(0)?.apply {
+                    view.loadMeal(this)
+                    GlobalScope.launch(Dispatchers.IO) {
+                        Log.d("updateMeals","${dao.updateMeal(this@apply)}")
+                    }
+                }
+
             } else onError(getApplication<Application>().getString(R.string.no_data_found))
         }
 
@@ -68,8 +80,11 @@ class MealDetailsViewModel<v : MealDetailsCallBack>(application: Application, va
         }
 
         override fun onNetWorkError(msg: String) {
-            loader.set(false)
-            error.set(msg)
+            dao.getMealById(id).observe(view.getMealActivity(), Observer {
+                loader.set(false)
+                view.loadMeal(it)
+            })
+           // error.set(msg)
             //reqMeal(id)
         }
 

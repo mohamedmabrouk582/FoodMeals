@@ -1,9 +1,8 @@
 package com.example.foodmeals.di.modules
 
 import com.example.foodmeals.data.api.BaseApi
-import com.google.gson.Gson
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.example.foodmeals.data.api.JuiceApi
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
@@ -12,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ApiModule (val juiceUrl:String, val foodUrl:String){
+class ApiModule (private val juiceUrl:String, private val foodUrl:String){
     val apiModule = module(override = true){
 
         single {

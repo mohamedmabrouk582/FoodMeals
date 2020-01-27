@@ -83,31 +83,173 @@ class MealDetailsActivity : BaseActivity() , MealDetailsCallBack, IngredientAdap
 
    private fun getIngredient(meal:Meal) : ArrayList<Ingredient>{
         val ingredients:ArrayList<Ingredient> = ArrayList()
-        meal.strIngredient1?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure1!!)) }
-        meal.strIngredient2?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure2!!)) }
-        meal.strIngredient3?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure3!!)) }
-        meal.strIngredient4?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure4!!)) }
-        meal.strIngredient5?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure5!!)) }
-        meal.strIngredient6?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure6!!)) }
-        meal.strIngredient7?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure7!!)) }
-        meal.strIngredient8?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure8!!)) }
-        meal.strIngredient9?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure9!!)) }
-        meal.strIngredient10?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure10!!)) }
-        meal.strIngredient11?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure11!!)) }
-        meal.strIngredient12?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure12!!)) }
-        meal.strIngredient13?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure13!!)) }
-        meal.strIngredient14?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure14!!)) }
-        meal.strIngredient15?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure15!!)) }
-        meal.strIngredient16?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure16!!)) }
-        meal.strIngredient17?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure17!!)) }
-        meal.strIngredient18?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure18!!)) }
-        meal.strIngredient19?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure19!!)) }
-        meal.strIngredient20?.apply { if (this.isNotEmpty()) ingredients.add(Ingredient(content = this,desc = meal.strMeasure20!!)) }
-       return ingredients
+       meal.apply {
+           strIngredient1?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure1
+                   )
+               )
+           }
+           strIngredient2?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure2
+                   )
+               )
+           }
+           strIngredient3?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure3
+                   )
+               )
+           }
+           strIngredient4?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure4
+                   )
+               )
+           }
+           strIngredient5?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure5
+                   )
+               )
+           }
+           strIngredient6?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure6
+                   )
+               )
+           }
+           strIngredient7?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure7
+                   )
+               )
+           }
+           strIngredient8?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure8
+                   )
+               )
+           }
+           strIngredient9?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure9
+                   )
+               )
+           }
+           strIngredient10?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure10
+                   )
+               )
+           }
+           strIngredient11?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure11
+                   )
+               )
+           }
+           strIngredient12?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure12
+                   )
+               )
+           }
+           strIngredient13?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure13
+                   )
+               )
+           }
+           strIngredient14?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure14
+                   )
+               )
+           }
+           strIngredient15?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure15
+                   )
+               )
+           }
+           strIngredient16?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure16
+                   )
+               )
+           }
+           strIngredient17?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure17
+                   )
+               )
+           }
+           strIngredient18?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure18
+                   )
+               )
+           }
+           strIngredient19?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure19
+                   )
+               )
+           }
+           strIngredient20?.apply {
+               if (this.isNotEmpty()) ingredients.add(
+                   Ingredient(
+                       content = this,
+                       desc = strMeasure20
+                   )
+               )
+           }
+       }
+           return ingredients
     }
 
     override fun onIngredientClick(ingredient: Ingredient) {
-     MealsActivity.start(this,ingredient.content,FiltersType.Ingredient,type)
+     MealsActivity.start(this,ingredient.idIngredient,ingredient.content,FiltersType.Ingredient,type)
     }
 
     inline fun <reified T : BaseViewModel<MealDetailsCallBack>> getViewModel(activity:FragmentActivity,factory:BaseViewModelFactory):T{

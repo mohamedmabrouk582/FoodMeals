@@ -1,12 +1,15 @@
 package com.example.foodmeals.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.example.foodmeals.R
 import com.example.foodmeals.callBacks.MealsHomeCallBack
 import com.example.foodmeals.data.api.BaseApi
+import com.example.foodmeals.data.db.MealDao
 import com.example.foodmeals.data.models.*
 import com.example.foodmeals.ui.activities.MealsActivity
 import com.example.foodmeals.ui.fragments.CountryFragment
@@ -14,6 +17,9 @@ import com.example.foodmeals.utils.network.RequestCoroutines
 import com.example.foodmeals.utils.network.RequestListener
 import com.example.foodmeals.viewModels.base.BaseViewModel
 import com.mabrouk.loaderlib.RetryCallBack
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 /*
@@ -21,7 +27,7 @@ import com.mabrouk.loaderlib.RetryCallBack
 * Cook Meals
 */
 
-class MealsHomeViewModel<v :MealsHomeCallBack>(application: Application, val api: BaseApi) : BaseViewModel<v>(application),RequestCoroutines {
+class MealsHomeViewModel<v :MealsHomeCallBack>(application: Application, val api: BaseApi,val dao: MealDao) : BaseViewModel<v>(application),RequestCoroutines {
     val categoryLoader : ObservableBoolean = ObservableBoolean()
     val mealsLoader: ObservableBoolean = ObservableBoolean()
     val categoryError: ObservableField<String> = ObservableField()
@@ -35,7 +41,7 @@ class MealsHomeViewModel<v :MealsHomeCallBack>(application: Application, val api
 
     val mealsCallBack : RetryCallBack = object : RetryCallBack{
         override fun onRetry() {
-            reqLatestMeals()
+            reqIngredients()
         }
 
     }
@@ -44,7 +50,13 @@ class MealsHomeViewModel<v :MealsHomeCallBack>(application: Application, val api
       api.getRandomMeals().handelEx(getApplication(), object : RequestListener<MealsResponse>{
           override fun onResponse(data: MutableLiveData<MealsResponse>) {
               if (data.value !=null && data.value?.meals !=null){
-                  view.addRandomMel(data.value?.meals?.get(0)!!)
+                  data.value?.meals?.get(0)?.apply {
+                      this.type=FoodType.Meals
+                      this.mealType=FoodType.MealsRandom
+                      GlobalScope.launch (Dispatchers.IO){ dao.insertOneMeal(this@apply)  }
+                      view.addRandomMel(this)
+                  }
+
                   if (limit>0){
                       reqRandomMeal(limit-1)
                   }
@@ -61,6 +73,13 @@ class MealsHomeViewModel<v :MealsHomeCallBack>(application: Application, val api
 
           override fun onNetWorkError(msg: String) {
             view.error(msg)
+             dao.getMeal(FoodType.MealsRandom).observe(view.getFragment(), Observer {
+                 it.apply {
+                     forEach { meal ->
+                         view.addRandomMel(meal)
+                     }
+                 }
+             })
           }
 
       })
@@ -72,6 +91,9 @@ class MealsHomeViewModel<v :MealsHomeCallBack>(application: Application, val api
         api.getCategories().handelEx(getApplication(),object : RequestListener<CategoryResponse>{
             override fun onResponse(data: MutableLiveData<CategoryResponse>) {
               if (data.value?.categories!=null){
+                  GlobalScope.launch(Dispatchers.IO) {
+                      dao.insertCategory(data.value?.categories!!)
+                  }
                   categoryLoader.set(false)
                   view.loadCategories(data.value?.categories!!)
               } else onError(getApplication<Application>().getString(R.string.no_data_found))
@@ -88,23 +110,33 @@ class MealsHomeViewModel<v :MealsHomeCallBack>(application: Application, val api
             }
 
             override fun onNetWorkError(msg: String) {
-                categoryLoader.set(false)
-                categoryError.set(msg)
+                dao.getCategory().observe(view.getFragment(), Observer {
+                    categoryLoader.set(false)
+                    if (it.isNullOrEmpty())
+                        categoryError.set(msg)
+                    else view.loadCategories(it as ArrayList<Category>)
+                    Log.d("MealsByCategory","$it")
+                })
+
+                //categoryError.set(msg)
             }
 
         })
     }
 
     fun search() {
-      MealsActivity.start(getApplication(),"",FiltersType.Search,FoodType.Meals)
+      MealsActivity.start(getApplication(),0,"",FiltersType.Search,FoodType.Meals)
     }
-    fun reqLatestMeals(){
+    fun reqIngredients(){
         mealsError.set(null)
         mealsLoader.set(true)
         api.getIngredients().handelEx(getApplication(),object : RequestListener<IngredientResponse>{
             override fun onResponse(data: MutableLiveData<IngredientResponse>) {
                 if (data.value?.meals!=null){
                    mealsLoader.set(false)
+                    GlobalScope.launch (Dispatchers.IO){
+                        dao.insertIngredient(data.value?.meals!!)
+                    }
                     view.loadIngredients(data.value?.meals!!)
                 } else onError(getApplication<Application>().getString(R.string.no_data_found))
             }
@@ -120,8 +152,16 @@ class MealsHomeViewModel<v :MealsHomeCallBack>(application: Application, val api
             }
 
             override fun onNetWorkError(msg: String) {
-                mealsLoader.set(false)
-                mealsError.set(msg)
+                dao.getIngredient().observe(view.getFragment(), Observer {
+                    mealsLoader.set(false)
+                    if (it.isNullOrEmpty())
+                        mealsError.set(msg)
+                    else view.loadIngredients(it as ArrayList<Ingredient>)
+                    Log.d("MealsByIngredient","$it")
+
+                })
+
+                //mealsError.set(msg)
             }
 
         })

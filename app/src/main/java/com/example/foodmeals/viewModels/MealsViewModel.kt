@@ -1,21 +1,29 @@
 package com.example.foodmeals.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.example.foodmeals.R
 import com.example.foodmeals.callBacks.MealsCallBack
 import com.example.foodmeals.data.api.BaseApi
 import com.example.foodmeals.data.api.JuiceApi
+import com.example.foodmeals.data.db.MealDao
 import com.example.foodmeals.data.models.FiltersType
+import com.example.foodmeals.data.models.FoodType
+import com.example.foodmeals.data.models.Meal
 import com.example.foodmeals.data.models.MealsResponse
 import com.example.foodmeals.utils.network.RequestCoroutines
 import com.example.foodmeals.utils.network.RequestListener
 import com.example.foodmeals.viewModels.base.BaseViewModel
 import com.mabrouk.loaderlib.RetryCallBack
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 /*
@@ -23,12 +31,13 @@ import kotlinx.coroutines.Deferred
 * Cook Meals
 */
 
-class MealsViewModel<v : MealsCallBack> (application: Application,val api:BaseApi,val juiceApi: JuiceApi): BaseViewModel<v>(application) , RequestCoroutines{
+class MealsViewModel<v : MealsCallBack> (application: Application,val api:BaseApi,val juiceApi: JuiceApi,val dao:MealDao): BaseViewModel<v>(application) , RequestCoroutines{
     val loader:ObservableBoolean = ObservableBoolean()
     val error:ObservableField<String> = ObservableField()
     lateinit var filterType : FiltersType
      var isDrink:Boolean=false
      var query:String=""
+     var id:Long=0
     val callBack:RetryCallBack = object : RetryCallBack{
         override fun onRetry() {
             reqMeals(query,filterType)
@@ -59,12 +68,17 @@ class MealsViewModel<v : MealsCallBack> (application: Application,val api:BaseAp
         this.query=query
         loader.set(true)
         error.set(null)
+        dao.getMealsByIngredientss().observe(view.getMealsActivity(), Observer {
+            it.forEach {
+                Log.d("hello", "${it.ingredient}")
+            }
+        })
        when(type){
             FiltersType.Category -> api.getFilterByCatgory(query)
             FiltersType.Ingredient -> api.getFilterByIngredient(query)
             FiltersType.Area -> api.getFilterByArea(query)
             FiltersType.Search -> api.searchMeals(query)
-        }.handelEx(getApplication(),requestListener)
+        }.handelEx(getApplication(),requestListener(FoodType.Meals))
     }
 
     fun reqDrink(query:String,type:FiltersType){
@@ -74,15 +88,14 @@ class MealsViewModel<v : MealsCallBack> (application: Application,val api:BaseAp
         loader.set(true)
         error.set(null)
         val response:Deferred<MealsResponse> = if (type== FiltersType.Ingredient)   juiceApi.filter(ingredient = query) else juiceApi.search(query)
-        response.handelEx(getApplication(),requestListener)
+        response.handelEx(getApplication(),requestListener(FoodType.Drinks))
     }
 
-
-    val requestListener: RequestListener<MealsResponse> = object : RequestListener<MealsResponse>{
+    private fun requestListener(type: FoodType) : RequestListener<MealsResponse> = object : RequestListener<MealsResponse>{
         override fun onResponse(data: MutableLiveData<MealsResponse>) {
             if (data.value?.meals!=null){
                 loader.set(false)
-                view.loadMeals(data = data.value?.meals!!)
+                view.loadMeals(data = filterMealsType(data.value?.meals!!,type))
             } else onError(getApplication<Application>().getString(R.string.no_data_found))
         }
 
@@ -99,14 +112,44 @@ class MealsViewModel<v : MealsCallBack> (application: Application,val api:BaseAp
         }
 
         override fun onNetWorkError(msg: String) {
+
             loader.set(false)
-            error.set(msg)
-            view.error(msg)
+            when(filterType){
+                FiltersType.Category -> dao.getMealsByCategory(query).observe(view.getMealsActivity(), Observer { loadData(it ,msg) })
+                FiltersType.Ingredient -> dao.getMealsByIngredients().observe(view.getMealsActivity(), Observer { loadData(it[0].meals ,msg)  })
+                FiltersType.Search ->  (if (query.isEmpty())  dao.getMeal(type) else dao.getSearchMeal(type, query)).observe(view.getMealsActivity(),
+                    Observer { loadData(it,msg) })
+                else -> dao.getMeal(type).observe(view.getMealsActivity(), Observer { loadData(it,msg) })
+            }
+           
+//            error.set(msg)
+//            view.error(msg)
         }
 
     }
 
+    fun loadData(data: List<Meal>, msg:String){
+        if (data.isNullOrEmpty()){ error.set(msg);view.error(msg)}
+        else view.loadMeals(data as ArrayList<Meal>)
+    }
 
 
+    fun filterMealsType(data:ArrayList<Meal>,type: FoodType) : ArrayList<Meal> =
+        data.apply {
+            GlobalScope.launch (Dispatchers.IO){
+//                if (filterType==FiltersType.Ingredient){
+//                    forEach {
+//                        it.type= type
+//                        dao.insertMealWithIngredient(MealsWithIngredients(id,it.idMeal))
+//                    }
+//                } else{
+                    forEach {
+                        it.type= type
+                    }
+                    dao.insertMeal(this@apply)
+             //   }
+
+            }
+        }
 
 }

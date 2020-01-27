@@ -66,7 +66,7 @@ class CountryFragment : BaseDialogFragment(), CountryAdapter.CountryListener {
     override fun getLayoutResource(): Int = R.layout.countries_layout
 
     override fun onCountryClick(country: CountryModel) {
-       MealsActivity.start(context!!,country.name,FiltersType.Area,FoodType.Meals)
+       MealsActivity.start(context!!,0,country.name,FiltersType.Area,FoodType.Meals)
         dismiss()
     }
 

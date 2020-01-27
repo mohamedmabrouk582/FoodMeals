@@ -42,7 +42,7 @@ class MealsHomeFragment : BaseFragment() , MealsHomeCallBack {
     val mealsAdapter:IngredientAdapter by lazy {
         IngredientAdapter(object : IngredientAdapter.IngredientListener{
             override fun onIngredientClick(ingredient: Ingredient) {
-                MealsActivity.start(context!!,ingredient.content,FiltersType.Ingredient,FoodType.Meals)
+                MealsActivity.start(context!!,ingredient.idIngredient,ingredient.content,FiltersType.Ingredient,FoodType.Meals)
             }
         })
     }
@@ -51,6 +51,7 @@ class MealsHomeFragment : BaseFragment() , MealsHomeCallBack {
             override fun onCategoryClick(category: Category) {
                 MealsActivity.start(
                     context!!,
+                    category.idCategory,
                     category.strCategory!!,
                     FiltersType.Category,FoodType.Meals
                 )
@@ -78,7 +79,7 @@ class MealsHomeFragment : BaseFragment() , MealsHomeCallBack {
         viewModelMeals.attachView(this)
         viewModelMeals.reqRandomMeal(20)
         viewModelMeals.reqCategory()
-        viewModelMeals.reqLatestMeals()
+        viewModelMeals.reqIngredients()
         layoutBinding.homeVm=viewModelMeals
     }
 
