@@ -10,7 +10,6 @@ class MealsByIngredient {
     @Embedded
     lateinit var ingredient:Ingredient
 
-    @Relation(parentColumn = "strIngredient",entityColumn = "idMeal",associateBy =
-    Junction(value = MealsWithIngredients::class , parentColumn = "strIngredient",entityColumn = "idMeal"))
+    @Relation(parentColumn = "idIngredient",entityColumn = "idMeal",associateBy = Junction(MealsWithIngredients::class))
     var meals:List<Meal> = emptyList()
 }

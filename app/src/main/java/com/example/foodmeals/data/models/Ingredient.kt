@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName
 */
 
 @Entity
-data class Ingredient(val idIngredient:Long=0, @PrimaryKey @ColumnInfo(name = "strIngredient") @SerializedName("strIngredient")val content:String, val desc:String?){
+data class Ingredient(@PrimaryKey @ColumnInfo(name = "idIngredient") val idIngredient:Long=0,  @SerializedName("strIngredient")val content:String, val desc:String?){
     var url:String=""
     get() { return "https://www.themealdb.com/images/ingredients/$content.png" }
 }

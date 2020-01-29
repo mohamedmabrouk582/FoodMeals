@@ -59,7 +59,7 @@ class MealDetailsViewModel<v : MealDetailsCallBack>(application: Application, va
                 data.value?.meals?.get(0)?.apply {
                     view.loadMeal(this)
                     GlobalScope.launch(Dispatchers.IO) {
-                        Log.d("updateMeals","${dao.updateMeal(this@apply)}")
+                        Log.d("updateMeals","${dao.updateMeal(this@apply)} : ${this@apply}")
                     }
                 }
 

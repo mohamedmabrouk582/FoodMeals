@@ -41,20 +41,20 @@ interface MealDao {
     @Query("select * from meal where meal_category=:category ")
     fun getMealsByCategory(category: String) : LiveData<List<Meal>>
 
-    @Transaction
-    @Query("select * from ingredient")
-    fun getMealsByIngredients() : LiveData<List<MealsByIngredient>>
-
 
     @Transaction
     @Query("select * from ingredient ")
-    fun getMealsByIngredientss() : LiveData<List<MealsByIngredient>>
+    fun getMealsByIngredients() : LiveData<List<MealsByIngredient>>
 
     @Query("select * from meal where type = :type or mealType=:type")
     fun getMeal(type:FoodType) : LiveData<List<Meal>>
 
     @Query("select * from meal where type = :type and strMeal like  '%' || :query  || '%' ")
-    fun getSearchMeal(type:FoodType,query:String) : LiveData<List<Meal>>
+     fun getSearchMeal(type:FoodType,query:String) : LiveData<List<Meal>>
+
+    @Query("select * from meal where type=:type and area=:country")
+    fun getMealsByArea(type:FoodType,country: String) : LiveData<List<Meal>>
+
 
     @Query("select * from meal where idMeal = :id ")
     fun getMealById(id:Long) : LiveData<Meal>

@@ -1,6 +1,7 @@
 package com.example.foodmeals.data.models
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Entity(primaryKeys = ["strIngredient","idMeal"])
-data class MealsWithIngredients(val strIngredient:Long,val idMeal:Long)
+@Entity
+data class MealsWithIngredients(@PrimaryKey(autoGenerate = true)val id:Long,val idIngredient:Long, val idMeal:Long)

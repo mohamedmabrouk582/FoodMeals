@@ -13,7 +13,7 @@ import com.example.foodmeals.data.models.MealsWithIngredients
 * Created By mabrouk on 20/03/19
 * KotilnApp
 */
-@Database(entities = [Meal::class,Category::class,Ingredient::class,MealsWithIngredients::class], version = 8, exportSchema = false)
+@Database(entities = [Meal::class,Category::class,Ingredient::class,MealsWithIngredients::class], version = 2, exportSchema = false)
 @TypeConverters(DataConvert::class)
 abstract class MealDb : RoomDatabase() {
      abstract fun getMealDao(): MealDao
